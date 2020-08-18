@@ -151,4 +151,19 @@
 
 9.  ClassFile 代表一个java的字节码文件(.class file)
 
-10. 
+10. ###  使用 javassist.Loader
+
+    1. ```java
+       Loader extends ClassLoader
+       ```
+
+       1. 继承了ClassLoader
+
+    2. ```java
+       interface Translator{
+           start(ClassPool pool) 在add到ClassPool的时候被调用
+           onLoad(ClassPool pool, String classname)  加载某个类的时候被调用
+       }
+       ```
+
+       1. 可以添加给Loader, 用来在类加载时附加监听机制
