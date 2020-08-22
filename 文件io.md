@@ -57,7 +57,13 @@
 
 7. lsof 显示进程打开了哪些文件  ls -p $$(表示当前bash进程)
 
-   1. 任何程序都有0  1 2 三个文件描述符
-   2. **exec** 8<ooxx.txt
+   1. 任何程序都有0 (标准输入) 1(标准输出)  2(报错输出) 三个文件描述符
+      1. /proc 内核映射路径
+      2. cd /proc/$$ 进入当前进程映射目录
+   2. **exec** 8<ooxx.txt  
+      1. 虽然exec和source都是在父进程中直接执行，但exec这个与source有很大的区别，source是执行shell脚本，而且执行后会返回以前的shell。而exec的执行不会返回以前的shell了，而是直接把以前登陆shell作为一个程序看待，在其上经行复制
+      2. ![image-20200822100427158](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20200822100427158.png)
    3. **read** a 0<& 8   读取8文件描述符到a变量  read读取会读取到换行符停止
-   4. 
+   4. **pcstat** -pid $$ 查看缓存页 pageCache
+   5. **lsof** -op $$ (使用前需要yum install lsof -y安装)  查看当前fd细节
+      1. 在终端下输入lsof即可显示系统打开的文件，因为 lsof 需要访问核心内存和各种文件，所以必须以 root 用户的身份运行它才能够充分地发挥其功能。  
