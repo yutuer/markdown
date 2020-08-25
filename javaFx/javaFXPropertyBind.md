@@ -90,5 +90,6 @@
    7. **避免内存泄漏, 需要调用removeListener** .   对于一些局部添加的的addListener, 可以使用 weak Listener, 一个weak listener是一个WeakListener接口的实例
 
       1. ![image-20200820213054579](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20200820213054579.png)
-
+   2. 
+   
    

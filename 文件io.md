@@ -1,5 +1,7 @@
 ### 文件io
 
+![img](https://pic2.zhimg.com/80/v2-deaab2ba9c2592aec7d92e87874fdcdd_720w.jpg)
+
 1. VFS 虚拟文件系统,树结构, 内存中.  不同的节点映射到不同的物理位置(ext4, ext3  fat 甚至是网络节点)
 
    1.  ll
@@ -40,7 +42,7 @@
          1. 程序调用内核直接刷
          2. 交由内核决定什么时候刷 .  阈值满足后刷新(时间, 或者容量)
 
-5. FD 文件描述符, 指针  属性: seek(偏移)  lsof命令
+5. FD 文件描述符, 指针  属性: seek(偏移)    **lsof命令**
 
    1. 每个程序读取文件的时候, 都有自己的seek. 不修改同一个位置的时候, 不用加锁  
 
@@ -65,5 +67,12 @@
       2. ![image-20200822100427158](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20200822100427158.png)
    3. **read** a 0<& 8   读取8文件描述符到a变量  read读取会读取到换行符停止
    4. **pcstat** -pid $$ 查看缓存页 pageCache
-   5. **lsof** -op $$ (使用前需要yum install lsof -y安装)  查看当前fd细节
+   5. **lsof** **-op** $$(或者pid) (使用前需要yum install lsof -y安装)  查看当前fd细节
       1. 在终端下输入lsof即可显示系统打开的文件，因为 lsof 需要访问核心内存和各种文件，所以必须以 root 用户的身份运行它才能够充分地发挥其功能。  
+   
+8. bash 解释执行程序 $$ 优先级比 | (管道符) 高, $ 要比|低.  
+
+   1. 管道会将 两边的语句先**启动子进程** , 例如 { echo $BASHPID; read x; } | { cat; echo $BASHPID; read y; } 会先启动2个子进程
+   2. echo $$ | cat 会打印当前进程id  
+   3. echo $BASHPID | cat 会打印子进程id
+   4. 
