@@ -75,4 +75,5 @@
    1. 管道会将 两边的语句先**启动子进程** , 例如 { echo $BASHPID; read x; } | { cat; echo $BASHPID; read y; } 会先启动2个子进程
    2. echo $$ | cat 会打印当前进程id  
    3. echo $BASHPID | cat 会打印子进程id
-   4. 
+   
+9. 
