@@ -130,3 +130,7 @@
           return THE_UNSAFE;
       }
       ```
+
+ 	4. Sequencer:  disruptor里生产同步的实现者,Sequencer有单生产者,多生产者两种不同的模式,里面实现了各种同步的算法
+      	1. 
+ 	5. 

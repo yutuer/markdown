@@ -105,4 +105,29 @@
    
          1. ![image-20200827095443757](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20200827095443757.png)
    
-         
+         2. 现在 x, y 或者2个变化的时候, z property会变成invalid,  下一次请求z的值的时候, 会重新计算x.add(y) 去得到它的值
+   
+         3. 可以调用 unbind()方法解绑. .  例如 z.unbind()
+   
+         4. ```java
+            IntegerProperty x = new SimpleIntegerProperty(10);
+            IntegerProperty y = new SimpleIntegerProperty(20);
+            IntegerProperty z = new SimpleIntegerProperty(60);
+            
+            z.bind(x.add(y));
+            System.out.println("after bind , z :Bound = " + z.isBound() + ", z = " + z.get()); //z的值为30
+            
+            x.set(15);
+            y.set(19);
+            System.out.println("after change x y, z :Bound = " + z.isBound() + ", z = " + z.get()); //z的值为34
+            
+            z.unbind();
+            
+            x.set(100);
+            y.set(200);
+            System.out.println("after unbinding, z :Bound = " + z.isBound() + ", z = " + z.get()); //!!! z的值为34
+            ```
+   
+            最后那里是关键, unbind后, 值就不会随x,y变化了
+   
+         5. 
