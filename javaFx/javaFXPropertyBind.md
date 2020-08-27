@@ -90,6 +90,19 @@
    7. **避免内存泄漏, 需要调用removeListener** .   对于一些局部添加的的addListener, 可以使用 weak Listener, 一个weak listener是一个WeakListener接口的实例
 
       1. ![image-20200820213054579](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20200820213054579.png)
-   2. 
+      
+   8. 在javaFx中使用绑定
    
+      1. 创建一个绑定:
    
+      2. ![image-20200827094458102](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20200827094458102.png)
+   
+      3. 绑定有一个invalid()方法, 表示是否有效.  当创建之后, 是invalid的. 只有当请求值的时候, 比如 sum.intValue() 调用的时候, 重新计算值, 并且标记为valid.  当你改变值之后, 它又会变成invalid, 知道你下次再请求它的值
+   
+      4. **一个绑定, 会对它绑定的所有依赖进行监听, 一旦有个依赖改变, 会设置为invalid. invalid不表示有值改变, 只表示获取值的时候需要重新计算值**
+   
+      5. 在javaFx中, 你可以将一个property也绑定到一个bind上. 使用bind方法, 比如
+   
+         1. ![image-20200827095443757](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20200827095443757.png)
+   
+         
