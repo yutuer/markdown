@@ -130,4 +130,64 @@
    
             最后那里是关键, unbind后, 值就不会随x,y变化了
    
-         5. 
+   9. javaFx 支持2种类型的绑定:  有向和双向 
+   
+      1. bind()方法在property和ObservableValue之间创建了单向绑定,   bindBidrectional() 在property和其他同类型的property之间创建了双向绑定
+   
+      2. 单向绑定有个限制.  例如 z.bind(x.add(y))  , 不能直接改变z的值.  需要先unbind之后, 才能z.set(1111)
+   
+      3. 单向绑定还有个限制, 一个property同一时间只能和一组绑定.  比如和x.add(y)   或者 a.add(b)  后来的绑定会替换掉之前的 比如. x=1, y = 2. a=3, b=4, 那么之前的值会是3 . 后来的会是7
+   
+      4. 双向绑定也有限制: 他只能在同类型propery之间创建.   但是一个属性可以同一时间绑定多个双向绑定.  双向绑定的属性能够单独的改变, 这个改变影响全部绑定在他上面的属性. 例如
+   
+         1.  x = y , x = z 开始的时候, xy=2 , 后来 xz =3 . 那么最后三个值都会和z一样, 是3
+   
+         2. ```java
+            listing 2-15
+            
+            IntegerProperty x = new SimpleIntegerProperty(1);
+            IntegerProperty y = new SimpleIntegerProperty(2);
+            IntegerProperty z = new SimpleIntegerProperty(3);
+            
+            System.out.println("Before binding:");
+            System.out.println("x=" + x.get() + ", y=" + y.get() + ", z=" + z.get());  // 1, 2, 3
+            
+            x.bindBidirectional(y);  // 实现机制, 2个property 绑定了监听
+            System.out.println("After binding-1:");
+            System.out.println("x=" + x.get() + ", y=" + y.get() + ", z=" + z.get()); // 2, 2, 3
+            
+            x.bindBidirectional(z);
+            System.out.println("After binding-2:");
+            System.out.println("x=" + x.get() + ", y=" + y.get() + ", z=" + z.get()); // 3, 3, 3
+            
+            System.out.println("After changing z:");
+            z.set(19);
+            System.out.println("x=" + x.get() + ", y=" + y.get() + ", z=" + z.get()); //19 , 19 , 19
+            
+            // Remove bindings
+            x.unbindBidirectional(y);
+            x.unbindBidirectional(z);
+            System.out.println("After unbinding and changing them separately:");
+            x.set(100);
+            y.set(200);
+            z.set(300);
+            System.out.println("x=" + x.get() + ", y=" + y.get() + ", z=" + z.get());  // 100 , 200, 300
+            ```
+   
+            **注意, unbind的时候, 每个绑定的都要移除. 比如上面的y和z**
+   
+   10. 明白绑定 API
+   
+       1. 绑定api分为2类
+   
+       2. 高级别绑定api : 让你能够使用javaFx类库来定义 binding. 大部分情况下, 可以使用高级别binding API
+   
+          1. 有2部分组成: FLuent APi 和binding class.  可以只使用 Fluent APi 或者 binding class, 或者两者一起来定义绑定
+          2. 使用 FLuent api.  叫这个名字是因为可以链式调用. 例如x.add(y).add(z)
+          3. 集中在 xxxExpression和 xxxBinding .   xxxExpression有一些让你创建绑定表达式的方法
+          4. binding 接口:
+             1. 
+   
+       3. 低级别绑定api : 写自己的逻辑去定义一个binding
+   
+          
