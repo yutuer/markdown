@@ -92,23 +92,23 @@
       1. ![image-20200820213054579](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20200820213054579.png)
       
    8. 在javaFx中使用绑定
-   
+
       1. 创建一个绑定:
-   
+
       2. ![image-20200827094458102](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20200827094458102.png)
-   
+
       3. 绑定有一个invalid()方法, 表示是否有效.  当创建之后, 是invalid的. 只有当请求值的时候, 比如 sum.intValue() 调用的时候, 重新计算值, 并且标记为valid.  当你改变值之后, 它又会变成invalid, 知道你下次再请求它的值
-   
+
       4. **一个绑定, 会对它绑定的所有依赖进行监听, 一旦有个依赖改变, 会设置为invalid. invalid不表示有值改变, 只表示获取值的时候需要重新计算值**
-   
+
       5. 在javaFx中, 你可以将一个property也绑定到一个bind上. 使用bind方法, 比如
-   
+
          1. ![image-20200827095443757](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20200827095443757.png)
-   
+
          2. 现在 x, y 或者2个变化的时候, z property会变成invalid,  下一次请求z的值的时候, 会重新计算x.add(y) 去得到它的值
-   
+
          3. 可以调用 unbind()方法解绑. .  例如 z.unbind()
-   
+
          4. ```java
             IntegerProperty x = new SimpleIntegerProperty(10);
             IntegerProperty y = new SimpleIntegerProperty(20);
@@ -127,21 +127,21 @@
             y.set(200);
             System.out.println("after unbinding, z :Bound = " + z.isBound() + ", z = " + z.get()); //!!! z的值为34
             ```
-   
+
             最后那里是关键, unbind后, 值就不会随x,y变化了
-   
+
    9. javaFx 支持2种类型的绑定:  有向和双向 
-   
+
       1. bind()方法在property和ObservableValue之间创建了单向绑定,   bindBidrectional() 在property和其他同类型的property之间创建了双向绑定
-   
+
       2. 单向绑定有个限制.  例如 z.bind(x.add(y))  , 不能直接改变z的值.  需要先unbind之后, 才能z.set(1111)
-   
+
       3. 单向绑定还有个限制, 一个property同一时间只能和一组绑定.  比如和x.add(y)   或者 a.add(b)  后来的绑定会替换掉之前的 比如. x=1, y = 2. a=3, b=4, 那么之前的值会是3 . 后来的会是7
-   
+
       4. 双向绑定也有限制: 他只能在同类型propery之间创建.   但是一个属性可以同一时间绑定多个双向绑定.  双向绑定的属性能够单独的改变, 这个改变影响全部绑定在他上面的属性. 例如
-   
+
          1.  x = y , x = z 开始的时候, xy=2 , 后来 xz =3 . 那么最后三个值都会和z一样, 是3
-   
+
          2. ```java
             listing 2-15
             
@@ -173,21 +173,48 @@
             z.set(300);
             System.out.println("x=" + x.get() + ", y=" + y.get() + ", z=" + z.get());  // 100 , 200, 300
             ```
-   
+
             **注意, unbind的时候, 每个绑定的都要移除. 比如上面的y和z**
-   
+
    10. 明白绑定 API
-   
+
        1. 绑定api分为2类
-   
+
        2. 高级别绑定api : 让你能够使用javaFx类库来定义 binding. 大部分情况下, 可以使用高级别binding API
-   
+
           1. 有2部分组成: FLuent APi 和binding class.  可以只使用 Fluent APi 或者 binding class, 或者两者一起来定义绑定
+
           2. 使用 FLuent api.  叫这个名字是因为可以链式调用. 例如x.add(y).add(z)
+
           3. 集中在 xxxExpression和 xxxBinding .   xxxExpression有一些让你创建绑定表达式的方法
+
           4. binding 接口:
-             1. 
-   
+             
+             1.  有4个方法
+                1. public void dispose()   实现可选, 表示 binding接口不再被使用了. 内部用弱引用来实现
+                2. public ObservableList<?> getDependencies()   实现可选.   返回一个代表依赖的不可变的ObservableList  .仅仅是为了debug的使用,这个方法不应该在生产环境使用
+                3. public void invalidate()  是binding 作废, 无效
+                4. public boolean isValid()   返回是否是有效的
+             
+          5. NumberBinding接口: 一个标记接口. 表示实现的实例wrap了一个int, long, float 或者 double类型.  继承了ObservableNumberValue 接口. 所以也会有4个返回方法
+
+          6. ObservableNumberValue   接口:  提供了4个返回方法. 
+
+             •	 double doubleValue()
+             •	 float floatValue()
+             •	 int intValue()
+             •	 long longValue()  
+
+             ```java
+             IntegerProperty x = new SimpleIntegerProperty(100);
+             IntegerProperty y = new SimpleIntegerProperty(200);
+             // Create a binding: sum = x + y
+             NumberBinding sum = x.add(y);
+             int value = sum.intValue(); // Get the int value
+             ```
+
+          7. ObservableIntegerValue 接口: 
+
        3. 低级别绑定api : 写自己的逻辑去定义一个binding
-   
+
           
