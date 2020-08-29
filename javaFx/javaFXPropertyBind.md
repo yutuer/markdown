@@ -46,7 +46,7 @@
       1. 大部分只使用默认值
       2. 不适用绑定的特性
 
-   3. ![image-20200820172619081](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20200820172619081.png)
+   3. ![image-20200820172619081](image-20200820172619081-1598663300579.png)
 
    4. Observable接口是顶层接口. 用来观察内容变的无效.   可以注册监听
 
@@ -89,13 +89,13 @@
 
    7. **避免内存泄漏, 需要调用removeListener** .   对于一些局部添加的的addListener, 可以使用 weak Listener, 一个weak listener是一个WeakListener接口的实例
 
-      1. ![image-20200820213054579](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20200820213054579.png)
+      1. ![image-20200820213054579](image-20200820213054579.png)
       
    8. 在javaFx中使用绑定
 
       1. 创建一个绑定:
 
-      2. ![image-20200827094458102](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20200827094458102.png)
+      2. ![image-20200827094458102](image-20200827094458102.png)
 
       3. 绑定有一个invalid()方法, 表示是否有效.  当创建之后, 是invalid的. 只有当请求值的时候, 比如 sum.intValue() 调用的时候, 重新计算值, 并且标记为valid.  当你改变值之后, 它又会变成invalid, 知道你下次再请求它的值
 
@@ -103,7 +103,7 @@
 
       5. 在javaFx中, 你可以将一个property也绑定到一个bind上. 使用bind方法, 比如
 
-         1. ![image-20200827095443757](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20200827095443757.png)
+         1. ![image-20200827095443757](image-20200827095443757.png)
 
          2. 现在 x, y 或者2个变化的时候, z property会变成invalid,  下一次请求z的值的时候, 会重新计算x.add(y) 去得到它的值
 
