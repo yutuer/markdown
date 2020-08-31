@@ -209,3 +209,83 @@ public class FullPressDragRelease extends Application
  	8. 手势目标使用来自dragboard  的数据。
  	9. 一个拖放事件被发送到手势源，表示拖放手势已经完成。
 
+##### Understanding the Data Transfer Modes
+
+在拖放手势中，数据可以在三种模式下传输:
+
+1. Copy   Copy 模式表示数据将从手势源复制到手势目标。你可以拖一个TextField，并把它放到另一个TextField。后者获得前者中包含的文本的副本
+2. Move  Move模式表示数据将从手势源移动到手势目标。你可以拖一个TextField，并把它放到另一个TextField。然后将前者中的文本移动到后者
+3. Link  Link  模式表示手势目标将创建一个指向正在存在的数据的链接(或引用)转移。“链接”的实际含义取决于应用程序。你可以在链接模式下拖放一个URL到WebView。然后WebView加载URL内容
+
+三种数据传输模式由以下三个常数在TransferMode enum中表示:
+
+•	 TransferMode.COPY
+•	 TransferMode.MOVE
+•	 TransferMode.LINK  
+
+有时您可能需要三种传输模式的组合。TransferMode枚举包含三个方便的静态字段，它们是枚举常量的数组:
+
+•	 TransferMode[] ANY      ANY字段是COPY, MOVE, and LINK  枚举常量的数组。
+
+•	 TransferMode[] COPY_OR_MOVE     COPY_OR_MOVE字段是复制和移动枚举常量的数组。
+
+•    TransferMode[] NONE    NONE常量是一个空数组。
+
+每个drag-and-drop  手势都使用了TransferMode enum常量。手势源指定它支持的数据传输模式。手势目标指定它接受数据传输的模式。
+
+##### Understanding the Dragboard  
+
+在拖放数据传输中，手势源和手势目标互不认识。实际上，它们可能属于两个不同的应用程序:两个JavaFX应用程序，或者一个JavaFX和一个本机应用程序。如果手势源和目标彼此不认识，那么它们之间的数据传输如何进行?在现实世界中，需要一个中介来促进两个未知方之间的交易。在拖放手势中，还使用了中介来方便数据传输.
+
+Dragboard  充当手势源和手势目标之间的中介。Dragboard  是保存被传输数据的存储设备。手势源将数据放入Dragboard  中;Dragboard  对手势目标可用，因此它可以检查可用于传输的内容类型。当手势目标准备好传输数据时，它从Dragboard  获取数据。图26-1显示了一个Dragboard  所扮演的角色。
+
+![image-20200831211348292](image-20200831211348292.png)
+
+Dragboard类的实例表示一个拖板。这个类是从剪贴板类继承的。Clipboard类的实例表示操作系统剪贴板。通常，操作系统在剪切、复制和粘贴操作期间使用剪贴板存储数据。您可以使用clipboard类的静态getSystemClipboard()方法获取操作系统通用剪贴板的引用:
+
+​												Clipboard systemClipboard = Clipboard.getSystemClipboard();  
+
+您可以将数据放在系统剪贴板中，系统中的所有应用程序都可以访问这些数据。您可以读取放在系统剪贴板中的数据，任何应用程序都可以将其放在那里。剪贴板可以存储不同类型的数据，例如，富文本格式(RTF)文本、纯文本、HTML、URL、图像或文件。该类包含几个方法，用于检查剪贴板中是否可用特定格式的数据。如果特定格式的数据可用，这些方法返回true。例如，如果剪贴板包含纯字符串，hasString()方法返回true;对于富文本格式的文本，hasRtf()方法返回true。该类包含以特定格式检索数据的方法。例如，getString()方法返回纯文本格式的数据;getHtml()返回HTML文本;getImage()返回一个图像，以此类推。方法的作用是清除剪贴板。
+
+Tip :  你不能直接创建Clipboard  类的实例。Clipboard  用于存储一个概念项。概念术语是指剪贴板中的数据可以以表示同一项的不同格式存储。例如，您可以存储rtF文本及其纯文本版本。在本例中，剪贴板有同一项的两个不同格式的副本.
+
+剪贴板并不仅限于存储固定数量的数据类型。任何可序列化的数据都可以存储在剪贴板上。存储在剪贴板上的数据具有关联的数据格式。DataFormat类的实例表示一种数据格式。DataFormat类包含六个静态字段来表示常用的数据格式:
+
+•	 FILES  代表文件对象列表 
+•	 HTML  html格式的string
+•	 IMAGE 平台指定的image类型
+•	 PLAIN_TEXT  表示一个纯文本字符串。
+•	 RTF  RTF表示一个RTF格式的字符串。
+•	 URL   URL表示一个编码为字符串的URL
+
+您可能希望在剪贴板中以上面列出的格式以外的格式存储数据。可以创建DataFormat对象来表示任意格式。您需要为您的数据格式指定mime类型列表。下面的语句以jdojo/person和jdojo/personlist作为mime类型创建一个DataFormat:
+
+​		DataFormat myFormat = new DataFormat("jdojo/person", "jdojo/person");  
+
+Clipboard类提供了以下方法来处理数据及其格式:
+
+•	 boolean setContent(Map<DataFormat,Object> content)
+•	 Object getContent(DataFormat dataFormat)  
+
+剪贴板的内容是一个以DataFormat为键、以数据为值的映射。如果剪贴板中不可用特定数据格式的数据，getContent()方法将返回null。下面的代码片段存储HTML和纯文本版本的数据，稍后，检索数据的两种格式:
+
+![image-20200831213507400](image-20200831213507400.png)
+
+准备要存储在剪贴板中的数据需要编写一些膨胀的代码。ClipboardContent类的一个实例表示剪贴板的内容，它使使用剪贴板数据变得更容易一些。类继承了HashMap&lt;DataFormat,Object&gt;类。它为常用的数据类型提供了putXxx()和getXxx()形式的便利方法。下面的代码片段重写了上面的逻辑，以便将数据存储到剪贴板中。检索数据的逻辑保持不变。
+
+![image-20200831213732025](image-20200831213732025.png)
+
+Dragboard类包含Clipboard类中可用的所有方法。它添加了以下方法:
+
+![image-20200831213820391](image-20200831213820391.png)
+
+![image-20200831213827420](image-20200831213827420.png)
+
+getTransferModes()方法返回手势目标支持的传输模式集。setDragView()   方法的作用是:将图像设置为拖放视图。图像显示时，手势源拖动。偏移量是光标在图像上的x和y位置。其他方法包括获取拖放视图图像和光标偏移量。
+
+Tip :  dragboard是一种特殊的系统剪贴板，用于拖放手势。您不能显式地创建一个dragboard。每当需要使用dragboard时，它的引用都作为方法或事件对象的属性的返回值可用。例如，DragEvent类包含一个getDragboard()方法，该方法返回包含被传输数据的dragboard的引用
+
+#### The Example Application  
+
+在下面的部分中，我将详细讨论拖放操作的步骤，您将构建一个示例应用程序。应用程序将在一个场景中显示两个textfield。一个文本字段称为源节点，另一个称为目标节点。用户可以将源节点拖放到目标节点上。手势完成后，源节点的文本将被传输(复制或移动)到目标节点。我将在讨论中提到这些节点。它们的声明如下:
+
