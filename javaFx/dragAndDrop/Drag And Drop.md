@@ -285,7 +285,21 @@ getTransferModes()方法返回手势目标支持的传输模式集。setDragView
 
 Tip :  dragboard是一种特殊的系统剪贴板，用于拖放手势。您不能显式地创建一个dragboard。每当需要使用dragboard时，它的引用都作为方法或事件对象的属性的返回值可用。例如，DragEvent类包含一个getDragboard()方法，该方法返回包含被传输数据的dragboard的引用
 
-#### The Example Application  
+### The Example Application  
 
 在下面的部分中，我将详细讨论拖放操作的步骤，您将构建一个示例应用程序。应用程序将在一个场景中显示两个textfield。一个文本字段称为源节点，另一个称为目标节点。用户可以将源节点拖放到目标节点上。手势完成后，源节点的文本将被传输(复制或移动)到目标节点。我将在讨论中提到这些节点。它们的声明如下:
+
+![image-20200901094830312](image-20200901094830312.png)
+
+##### Initiating the Drag-and-Drop Gesture  
+
+drag-and-drop  手势的第一步是将一个simple press-drag-release  手势转换为drag-and-drop  手势。这是在手势源的mouse-drag  检测事件处理程序中完成的。在手势源上调用startDragAndDrop()方法会启动一个drag-and-drop手势。该方法在节点和场景类中可用，因此节点和场景可以作为drag-and-drop手势的手势源。方法签名为:   **Dragboard startDragAndDrop(TransferMode... transferModes)**  
+
+该方法接受手势源支持的传输模式列表，并返回一个dragboard。手势源需要用它打算传输的数据填充dragboard。下面的代码片段启动一个拖放手势，将源TextField文本复制到dragboard，并使用该事件。只有当TextField包含文本时，才会启动拖放手势:
+
+
+
+
+
+
 
