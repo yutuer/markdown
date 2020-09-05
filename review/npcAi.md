@@ -2,6 +2,10 @@
 
 通用AI管理器
 
+// 类图
+
+<img src="image-20200903142259464.png" alt="image-20200903142259464"  />
+
 ```java
 class NpcIdleAIManager
 ```
@@ -58,6 +62,10 @@ void checkAiCondition();
 
 
 
+![image-20200903132318642](image-20200903132318642.png)
+
+
+
 ```java
  abstract class AbstractAiConditionTrigger
 ```
@@ -85,6 +93,8 @@ void init(NpcIdleAIManager idleAIManager, int stateIndex, int conditionIndex, Di
 ```
 
 
+
+一个实例代表npc的一种状态, 对应一个**DictNpcIdleAiState**记录
 
 ```java
 class IdleAiState<T extends AbstractCharacter>
