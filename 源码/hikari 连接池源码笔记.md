@@ -1,3 +1,7 @@
+![image-20200909143331446](image-20200909143331446.png)
+
+
+
 #### 微观上 HiKariCP 程序编译出的字节码执行效率更高，站在字节码的角度去优化 Java 代码。而宏观上主要是和两个数据结构有关，一个是 FastList，另一个是 ConcurrentBag。
 
 ### FastList 解决了哪些性能问题
@@ -176,6 +180,7 @@ public void add(final T bagEntry)
          finally {
             waiters.decrementAndGet();
         }
+    ```
 ```
     
     #### 这种异步增加任务是为了什么?  就是为了请求到来的同时, 也会有新的创建bagEntry一直不停的再运行, 新来的请求可以更快的获得连接
@@ -208,7 +213,7 @@ public void add(final T bagEntry)
       ReferenceQueue<String> referenceQueue = new ReferenceQueue<>();
           String str = new String("abc");
           SoftReference<String> softReference = new SoftReference<>(str, referenceQueue);
-      ```
+```
 
    4. 当内存不足时，`JVM`首先将**软引用**中的**对象**引用置为`null`，然后通知**垃圾回收器**进行回收：
 

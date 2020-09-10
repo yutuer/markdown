@@ -82,6 +82,8 @@
 
 
             <plugin>
+                <finalName>circleCheck</finalName>
+                
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>2.4.1</version>

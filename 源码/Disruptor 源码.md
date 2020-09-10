@@ -24,7 +24,8 @@
 
 2. Sequence: 序列器,Sequence本身提供了类似AtomicLong的各个特性, 可以认为就是一个long值
 
-   1. 生产者,消费者都是这个类的使用者,每个使用者都会维护一个Sequence来标识自己的读/写下标。,disruptor里面大部分的并发代码都是通过对Sequence的值同步修改实现的,而非锁,这是disruptor高性能的一个主要原因.
+   1.  ![image-20200909165455840](image-20200909165455840.png)
+   2.  生产者,消费者都是这个类的使用者,每个使用者都会维护一个Sequence来标识自己的读/写下标。,disruptor里面大部分的并发代码都是通过对Sequence的值同步修改实现的,而非锁,这是disruptor高性能的一个主要原因.
 
    2. ```java
       VALUE_OFFSET = UNSAFE.objectFieldOffset(Value.class.getDeclaredField("value"));
@@ -131,6 +132,8 @@
       }
       ```
 
- 	4. Sequencer:  disruptor里生产同步的实现者,Sequencer有单生产者,多生产者两种不同的模式,里面实现了各种同步的算法
-      	1. 
- 	5. 
+  4. Sequencer:  disruptor里生产同步的实现者,Sequencer有单生产者,多生产者两种不同的模式,里面实现了各种同步的算法
+     	
+1. 
+     	
+  5. 
