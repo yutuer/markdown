@@ -141,8 +141,6 @@ void onMoveTo(IAoi aoi, int x, int y, int newX, int newY)
 
 
 
-
-
 十字链表 
 
 ```java
@@ -155,6 +153,10 @@ class CrossLinkNode extends BaseNode
     // y 轴
     public CrossLinkNode yPrev;
     public CrossLinkNode yNext;
+    
+    // 2个方向上的跳点指针
+    public NormalIndexSkipNode xIndexSkipNode;
+    public NormalIndexSkipNode yIndexSkipNode;
 }
 ```
 
@@ -394,6 +396,8 @@ void beforeMoveTo(IAoi aoi, CrossLinkNode node, int x, int y)
 }
 ```
 
+
+
 ```java
 public void afterMoveTo(IAoi aoi, CrossLinkNode node, int fromX, int fromY)
 {
@@ -424,3 +428,47 @@ public void afterMoveTo(IAoi aoi, CrossLinkNode node, int fromX, int fromY)
     setBack.clear();
 }
 ```
+
+
+
+```java
+public class CrossQuickSearch
+{
+    /**
+     * 跨度(多长距离建立一个节点, 假定是正方形. 如果不是还需要加入xy区分)
+     */
+    private int scale;
+
+    private NormalIndexSkipNode[] xQuickSearchNodes;
+    private NormalIndexSkipNode[] yQuickSearchNodes;
+}
+```
+
+```java
+public class NormalIndexSkipNode
+{
+    public static final int X = 1;
+    public static final int Y = 2;
+
+    /**
+     * 方向
+     */
+    public int direction;
+
+    /**
+     * 索引
+     */
+    public int index;
+
+    /**
+     * 在格子轴上的位置(= index * scale)
+     */
+    public int pos;
+
+    /**
+     * 查找的第一个
+     */
+    CrossLinkNode first;
+}
+```
+
