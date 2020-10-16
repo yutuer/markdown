@@ -61,6 +61,8 @@ class NpcIdleAIManager
 
 
 ```java
+NpcIdleAIManager.class
+    
 /**
  * tick检查
  */
@@ -86,6 +88,8 @@ public void tick(int interval)
 ```
 
 ```java
+IdleAiState.class
+
 /**
  * 检查各个状态条件是否满足
  * 是否需要切换状态
@@ -134,6 +138,108 @@ private void checkAiCondition()
     isDirty = false;
 }
 ```
+
+状态切换 逻辑
+
+```java
+IdleAiState.class
+
+/**
+ * 状态切换
+ * @param index
+ */
+public void executeNextState(int index)
+{
+    IdleAiState aiState = getIdleAIState(curStateIndex);
+    if(aiState != null)
+    {
+        //打断当前状态 [Mine 执行breakAction]
+        aiState.breakAiState();
+    }
+    //设置，并执行下一状态
+    curStateIndex = index;
+    aiState = getIdleAIState(curStateIndex);
+    if(aiState != null)
+    {
+        aiState.setBreakCurState(false);
+        // [Mine 开始执行action]
+        aiState.executeNextAction();
+    }
+}
+```
+
+
+
+```java
+IdleAiState.class
+
+/**
+ * 行为正常执行完，执行下一个行为
+ * 如果没有下一行为，切换到第一个状态
+ */
+public void executeNextAction()
+{
+    if(isBreakCurState)
+    {
+        //状态已经被打断，不再执行
+        return;
+    }
+    this.curActionIndex++;
+    int index = this.curActionIndex;
+    //已经执行到最后一个行为
+    if(index >= actions.length)
+    {
+        // [Mine 重置索引!!]
+        reset();
+        //重置状态索引,跳转到优先级最低一个
+        this.idleAIManager.resetState();
+        resetConditionMark(stateIndex);
+        return;
+    }
+
+    //判断状态切换，是否还执行此行为
+    AbstractAiAction aiAction = getAiAction(index);
+    if(aiAction != null)
+    {
+        checkChangeAction(aiAction.getActionId());
+        aiAction.executeAiAction(this,0);
+    }
+}
+```
+
+
+
+```java
+AbstractAiAction.class
+
+/**
+ * 行为执行,会进行下一行为判断
+ */
+public final void executeAiAction(IdleAiState idleAIState, int interval)
+{
+    if(isComplete)
+    {
+        return;
+    }
+    toExecuteAiAction(idleAIState, interval);
+
+    //行为已经完成，直接返回
+    if (isComplete)
+    {
+        //不是持续行为
+        if(!actionData.getIsContinue())
+        {
+            //重置参数
+            reset();
+            //执行下一行为
+            idleAIState.executeNextAction();
+        }
+        return;
+    }
+}
+```
+
+
 
 
 
