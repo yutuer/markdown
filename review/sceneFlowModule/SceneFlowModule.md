@@ -106,6 +106,8 @@ class SceneFlowModule
 
 
 
+检查触发器逻辑
+
 ```java
 public void tickTrigger(int interval)
 {
@@ -240,70 +242,62 @@ class AbstractSceneTrigger
 
 
 
-
-
-
-
-
-
 ```java
 class AbstractSceneSelector
+{
+    /**
+     * 配置引用
+     */
+    private DictSceneSelector dictSceneSelector;
+
+    private boolean destroy = false;
+
+    /**
+     * 所在场景
+     */
+    private AbstractBPScene scene;
+
+    /**
+     * 触发次数
+     */
+    private int triggerCount;    
+}
+
 ```
 
-```java
-/**
- * 配置引用
- */
-private DictSceneSelector dictSceneSelector;
 
-private boolean destroy = false;
-
-/**
- * 所在场景
- */
-private AbstractBPScene scene;
-
-/**
- * 触发次数
- */
-private int triggerCount;
-```
 
 
 
 ```java
 class AbstractSceneLooper
-```
+{
+    /**
+     * 配置引用
+     */
+    private DictSceneLooper dictSceneLooper;
 
-```java
-/**
- * 配置引用
- */
-private DictSceneLooper dictSceneLooper;
+    /**
+     * 当前循环执行次数
+     */
+    private int currentLoopCount = 0;
 
-/**
- * 当前循环执行次数
- */
-private int currentLoopCount = 0;
+    /**
+     * 所在场景
+     */
+    private AbstractBPScene scene;
 
-/**
- * 所在场景
- */
-private AbstractBPScene scene;
-
-/**
- * 是否已销毁
- */
-private boolean destroy = false;
-```
-
-
-
-
-
-```java
+    /**
+     * 是否已销毁
+     */
+    private boolean destroy = false;    
+}
 
 ```
+
+
+
+
 
 ```java
 class AbstractSceneCondition
