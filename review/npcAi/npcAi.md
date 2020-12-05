@@ -88,7 +88,7 @@ public void tick(int interval)
 ```
 
 ```java
-IdleAiState.class
+NpcIdleAIManager.class
 
 /**
  * 检查各个状态条件是否满足
