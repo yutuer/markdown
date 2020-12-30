@@ -209,6 +209,8 @@ public void executeNextAction()
 
 
 
+action执行的逻辑
+
 ```java
 AbstractAiAction.class
 
@@ -217,13 +219,14 @@ AbstractAiAction.class
  */
 public final void executeAiAction(IdleAiState idleAIState, int interval)
 {
+     //行为已经完成，直接返回
     if(isComplete)
     {
         return;
     }
+    
     toExecuteAiAction(idleAIState, interval);
 
-    //行为已经完成，直接返回
     if (isComplete)
     {
         //不是持续行为
@@ -231,7 +234,7 @@ public final void executeAiAction(IdleAiState idleAIState, int interval)
         {
             //重置参数
             reset();
-            //执行下一行为
+            // 由AIState 来触发执行下一行为
             idleAIState.executeNextAction();
         }
         return;
